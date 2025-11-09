@@ -191,7 +191,7 @@ export async function reverseGeocode(lat: number, lon: number, options?: {
       throw new Error(`Mapbox API error: ${response.status} ${response.statusText}`);
     }
 
-    const data = await response.json() as { features?: Array<{ place_type?: string[]; context?: Array<{ id?: string; text?: string; short_code?: string }>; properties?: { address?: string; city?: string; state?: string; postcode?: string; country?: string } }> };
+    const data = await response.json() as { features?: Array<{ place_type?: string[]; text?: string; context?: Array<{ id?: string; text?: string; short_code?: string }>; properties?: { address?: string; name?: string; city?: string; state?: string; postcode?: string; country?: string } }> };
 
     if (!data.features || data.features.length === 0) {
       return null;
