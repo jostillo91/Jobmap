@@ -193,7 +193,7 @@ async function scrapeIndeedJobs(
         const salaryEl = element.querySelector('[data-testid="attribute_snippet_testid"], .salaryText, .salary');
         const linkEl = titleEl || element.querySelector("a");
 
-        if (titleEl && companyEl && locationEl) {
+        if (titleEl && companyEl && locationEl && linkEl) {
           const title = titleEl.textContent?.trim() || "";
           const company = companyEl.textContent?.trim() || "";
           const location = locationEl.textContent?.trim() || "";
@@ -332,7 +332,6 @@ export async function ingestIndeed(
         "--disable-features=IsolateOrigins,site-per-process",
         "--window-size=1920,1080",
       ],
-      ignoreHTTPSErrors: true,
     });
 
     const page = await browser.newPage();

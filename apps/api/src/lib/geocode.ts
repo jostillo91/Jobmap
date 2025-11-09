@@ -93,7 +93,7 @@ async function geocodeWithMapbox(address: GeocodeAddress): Promise<GeocodeResult
       throw new Error(`Mapbox API error: ${response.status} ${response.statusText}`);
     }
 
-    const data = await response.json() as { features?: Array<{ center: [number, number] }> };
+    const data = await response.json() as { features?: Array<{ center: [number, number]; properties?: { accuracy?: string } }> };
 
     if (!data.features || data.features.length === 0) {
       throw new Error("No results found for address");

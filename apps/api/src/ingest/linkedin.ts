@@ -321,7 +321,6 @@ export async function ingestLinkedIn(
         "--disable-web-security",
         "--window-size=1920,1080",
       ],
-      ignoreHTTPSErrors: true,
     });
 
     const page = await browser.newPage();

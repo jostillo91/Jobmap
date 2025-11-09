@@ -333,7 +333,6 @@ export async function ingestZipRecruiter(
         "--disable-features=IsolateOrigins,site-per-process",
         "--window-size=1920,1080",
       ],
-      ignoreHTTPSErrors: true,
     });
 
     const page = await browser.newPage();

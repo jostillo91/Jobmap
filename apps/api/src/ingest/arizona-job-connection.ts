@@ -244,7 +244,7 @@ async function scrapeArizonaJobConnectionJobs(
       const location = locationEl?.textContent?.trim() || "";
       
       if (title && url && url.includes("/jobs/")) {
-        results.push({ title, company, location, url });
+        results.push({ title, company, location, url, description: "" });
       }
     }
     
