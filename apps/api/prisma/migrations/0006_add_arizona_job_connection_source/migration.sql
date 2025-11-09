@@ -1,0 +1,3 @@
+-- AlterEnum
+ALTER TYPE "JobSource" ADD VALUE 'ARIZONA_JOB_CONNECTION';
+

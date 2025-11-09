@@ -1,0 +1,78 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum EmploymentType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  TEMP
+  INTERN
+}
+
+enum JobSource {
+  ADZUNA
+  USAJOBS
+  MANUAL
+  LINKEDIN
+  INDEED
+  ZIPRECRUITER
+  ARIZONA_JOB_CONNECTION
+  GOOGLE_JOBS
+}
+
+enum JobStatus {
+  APPROVED
+  PENDING
+  REJECTED
+}
+
+model Job {
+  id            String   @id @default(cuid())
+  source        JobSource
+  sourceId      String   // e.g., Adzuna/USAJOBS id
+  title         String
+  company       String
+  description   String
+  url           String
+  street        String?
+  city          String?
+  state         String?
+  postalCode    String?
+  country       String   @default("US")
+  latitude      Float
+  longitude     Float
+  locationPoint Bytes    // PostGIS POINT stored via raw SQL (lon/lat)
+  employmentType EmploymentType?
+  payMin        Int?
+  payMax        Int?
+  payCurrency   String?  @default("USD")
+  status        JobStatus @default(APPROVED)
+  postedAt      DateTime
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([source, sourceId])
+  @@index([company])
+  @@index([postedAt])
+  @@index([status])
+  @@map("jobs")
+}
+
+model GeocodeCache {
+  key   String @id // Normalized address string
+  lat   Float
+  lon   Float
+  createdAt DateTime @default(now())
+
+  @@map("geocode_cache")
+}
+

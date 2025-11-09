@@ -1,0 +1,30 @@
+app = "jobmap-api"
+primary_region = "phx"
+
+[build]
+  builder = "paketobuildpacks/builder:base"
+
+[env]
+  PORT = "4000"
+  NODE_ENV = "production"
+
+[[services]]
+  internal_port = 4000
+  protocol = "tcp"
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+    force_https = true
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
+
+  [services.concurrency]
+    type = "requests"
+    hard_limit = 25
+    soft_limit = 20
+
+[deploy]
+  release_command = "cd /app && pnpm --filter @jobmap/api prisma migrate deploy"
