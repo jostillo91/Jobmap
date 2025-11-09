@@ -164,7 +164,7 @@ async function normalizeAdzunaJob(adzunaJob: AdzunaJob): Promise<JobInput | null
   }
   
   // Reverse geocode to get street address from coordinates (if not already extracted)
-  let fullAddress = extractedStreetAddress 
+  const fullAddress = extractedStreetAddress 
     ? { street: extractedStreetAddress, city: locationParts.city, state: locationParts.state, postalCode: locationParts.postalCode, country: "US" }
     : await reverseGeocode(latitude, longitude);
   

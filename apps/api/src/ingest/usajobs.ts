@@ -365,7 +365,6 @@ async function fetchUSAJobsJobs(keyword?: string, page = 1): Promise<{
   jobs: USAJobsSearchResult[];
   hasMore: boolean;
 }> {
-  const host = process.env.USAJOBS_HOST || "data.usajobs.gov";
   const userAgent = process.env.USAJOBS_USER_AGENT;
   const apiKey = process.env.USAJOBS_API_KEY;
 

@@ -1,19 +1,17 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 // Mock dependencies before importing
-const mockFindUnique = vi.fn();
-const mockUpsert = vi.fn();
-
 vi.mock("../prisma", () => ({
   prisma: {
     geocodeCache: {
-      findUnique: mockFindUnique,
-      upsert: mockUpsert,
+      findUnique: vi.fn(),
+      upsert: vi.fn(),
     },
   },
 }));
 
 import { geocodeAddress, geocodeAddressSafe } from "../geocode";
+import { prisma } from "../prisma";
 
 // Mock fetch globally
 global.fetch = vi.fn();
@@ -34,7 +32,8 @@ describe("Geocoding", () => {
     };
 
     // First call - cache miss, should call API
-    mockFindUnique.mockResolvedValueOnce(null);
+    (prisma.geocodeCache.findUnique as any).mockResolvedValueOnce(null);
+    // Mock proximity bias fetch (city lookup)
     (global.fetch as any).mockResolvedValueOnce({
       ok: true,
       json: async () => ({
@@ -45,7 +44,18 @@ describe("Geocoding", () => {
         ],
       }),
     });
-    mockUpsert.mockResolvedValueOnce({
+    // Mock main geocode fetch
+    (global.fetch as any).mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        features: [
+          {
+            center: [-112.074, 33.4484], // [lon, lat]
+          },
+        ],
+      }),
+    });
+    (prisma.geocodeCache.upsert as any).mockResolvedValueOnce({
       key: "123 main st, phoenix, az, 85001, us",
       lat: 33.4484,
       lon: -112.074,
@@ -55,11 +65,13 @@ describe("Geocoding", () => {
 
     expect(result1.lat).toBe(33.4484);
     expect(result1.lon).toBe(-112.074);
-    expect(global.fetch).toHaveBeenCalledTimes(1);
-    expect(mockUpsert).toHaveBeenCalled();
+    expect(global.fetch).toHaveBeenCalledTimes(2); // Proximity bias + main geocode
+    expect(prisma.geocodeCache.upsert).toHaveBeenCalled();
 
     // Second call - cache hit, should not call API
-    mockFindUnique.mockResolvedValueOnce({
+    // Reset fetch mock call count
+    (global.fetch as any).mockClear();
+    (prisma.geocodeCache.findUnique as any).mockResolvedValueOnce({
       key: "123 main st, phoenix, az, 85001, us",
       lat: 33.4484,
       lon: -112.074,
@@ -81,7 +93,7 @@ describe("Geocoding", () => {
       country: "US",
     };
 
-    mockFindUnique.mockResolvedValueOnce(null);
+    (prisma.geocodeCache.findUnique as any).mockResolvedValueOnce(null);
     (global.fetch as any).mockResolvedValueOnce({
       ok: true,
       json: async () => ({

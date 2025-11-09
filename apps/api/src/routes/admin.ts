@@ -2,7 +2,7 @@ import { FastifyInstance } from "fastify";
 import { z } from "zod";
 import { prisma } from "../lib/prisma";
 import { JobStatus } from "@prisma/client";
-import { JobPin, JobDetail } from "../types/jobs";
+import { JobPin } from "../types/jobs";
 import { captureException } from "../lib/sentry";
 
 // Admin key validation
@@ -37,33 +37,6 @@ function jobToPin(job: any): JobPin {
     state: job.state ?? undefined,
     employmentType: job.employmentType ?? undefined,
     source: job.source,
-  };
-}
-
-// Convert job to detail format
-function jobToDetail(job: any): JobDetail {
-  return {
-    id: job.id,
-    source: job.source,
-    sourceId: job.sourceId,
-    title: job.title,
-    company: job.company,
-    description: job.description,
-    url: job.url,
-    street: job.street ?? undefined,
-    city: job.city ?? undefined,
-    state: job.state ?? undefined,
-    postalCode: job.postalCode ?? undefined,
-    country: job.country,
-    latitude: job.latitude,
-    longitude: job.longitude,
-    employmentType: job.employmentType ?? undefined,
-    payMin: job.payMin ?? undefined,
-    payMax: job.payMax ?? undefined,
-    payCurrency: job.payCurrency ?? undefined,
-    postedAt: job.postedAt.toISOString(),
-    createdAt: job.createdAt.toISOString(),
-    updatedAt: job.updatedAt.toISOString(),
   };
 }
 

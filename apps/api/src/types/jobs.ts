@@ -1,5 +1,3 @@
-import { EmploymentType, JobSource } from "@prisma/client";
-
 export type JobPin = {
   id: string;
   title: string;

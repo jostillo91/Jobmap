@@ -16,12 +16,6 @@ interface IndeedJob {
   employmentType?: string;
 }
 
-/**
- * Sleep utility
- */
-function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
 
 /**
  * Normalizes Indeed employment type to our enum

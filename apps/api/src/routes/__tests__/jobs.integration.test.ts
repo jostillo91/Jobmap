@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import Fastify from "fastify";
 import { jobsRoutes } from "../jobs";
 import { prisma } from "../../lib/prisma";
-import { getCache, setCache } from "../../lib/redis";
+import { getCache } from "../../lib/redis";
 
 // Mock dependencies
 vi.mock("../../lib/prisma", () => ({
@@ -109,6 +109,11 @@ describe("Jobs API Integration Tests", () => {
       expect(data.jobs).toHaveLength(1);
       expect(prisma.$queryRawUnsafe).toHaveBeenCalledWith(
         expect.stringContaining("LOWER(title) LIKE"),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
         expect.anything()
       );
     });
@@ -146,6 +151,11 @@ describe("Jobs API Integration Tests", () => {
       expect(data.jobs).toHaveLength(1);
       expect(prisma.$queryRawUnsafe).toHaveBeenCalledWith(
         expect.stringContaining("LOWER(company) LIKE"),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
         expect.anything()
       );
     });
@@ -183,6 +193,11 @@ describe("Jobs API Integration Tests", () => {
       expect(data.jobs).toHaveLength(1);
       expect(prisma.$queryRawUnsafe).toHaveBeenCalledWith(
         expect.stringContaining('"payMax" >='),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
         expect.anything()
       );
     });
@@ -220,6 +235,12 @@ describe("Jobs API Integration Tests", () => {
       expect(data.jobs).toHaveLength(1);
       expect(prisma.$queryRawUnsafe).toHaveBeenCalledWith(
         expect.stringContaining('"employmentType" ='),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
         expect.anything()
       );
     });
@@ -331,7 +352,7 @@ describe("Jobs API Integration Tests", () => {
         updatedAt: new Date("2024-01-01"),
       };
 
-      (prisma.job.findUnique as any).mockResolvedValue(mockJob);
+      (prisma.$queryRawUnsafe as any).mockResolvedValue([mockJob]);
 
       const response = await app.inject({
         method: "GET",
@@ -346,7 +367,7 @@ describe("Jobs API Integration Tests", () => {
     });
 
     it("should return 404 for non-existent job", async () => {
-      (prisma.job.findUnique as any).mockResolvedValue(null);
+      (prisma.$queryRawUnsafe as any).mockResolvedValue([]);
 
       const response = await app.inject({
         method: "GET",

@@ -17,10 +17,6 @@ interface GoogleJob {
   address?: string;
 }
 
-function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
 function normalizeEmploymentType(type?: string): EmploymentType | null {
   if (!type) return null;
   const normalized = type.toLowerCase();
