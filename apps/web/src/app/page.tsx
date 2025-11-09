@@ -414,7 +414,7 @@ export default function Home() {
                 {data.count === 1 ? "job" : "jobs"} found
                 {filters.keyword && (
                   <span className="ml-2">
-                    for "<span className="font-medium">{filters.keyword}</span>"
+                    for &quot;<span className="font-medium">{filters.keyword}</span>&quot;
                   </span>
                 )}
                 {data.count > jobsPerPage && (

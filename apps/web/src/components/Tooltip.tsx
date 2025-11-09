@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, ReactNode } from "react";
+import { useState, useRef, useEffect, useCallback, ReactNode } from "react";
 
 interface TooltipProps {
   content: string | ReactNode;
@@ -40,7 +40,7 @@ export default function Tooltip({
     setIsVisible(false);
   };
 
-  const updatePosition = () => {
+  const updatePosition = useCallback(() => {
     if (!tooltipRef.current || !triggerRef.current) return;
 
     const triggerRect = triggerRef.current.getBoundingClientRect();
@@ -73,7 +73,7 @@ export default function Tooltip({
         });
         break;
     }
-  };
+  }, [position]);
 
   useEffect(() => {
     if (isVisible) {
@@ -85,7 +85,7 @@ export default function Tooltip({
       window.removeEventListener("scroll", updatePosition, true);
       window.removeEventListener("resize", updatePosition);
     };
-  }, [isVisible]);
+  }, [isVisible, updatePosition]);
 
   return (
     <div

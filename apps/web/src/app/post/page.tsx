@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import mapboxgl from "mapbox-gl";
@@ -100,7 +100,7 @@ export default function PostJobPage() {
   });
   const [isValidatingAddress, setIsValidatingAddress] = useState(false);
 
-  const validateAddress = async () => {
+  const validateAddress = useCallback(async () => {
     if (!formData.street || !formData.city || !formData.state || !formData.postalCode) {
       setPreviewCoords({ lat: null, lon: null });
       return;
@@ -133,7 +133,7 @@ export default function PostJobPage() {
     } finally {
       setIsValidatingAddress(false);
     }
-  };
+  }, [formData.street, formData.city, formData.state, formData.postalCode, formData.country]);
 
   // Validate address when address fields change
   useEffect(() => {
@@ -142,7 +142,7 @@ export default function PostJobPage() {
     }, 500); // Debounce
 
     return () => clearTimeout(timer);
-  }, [formData.street, formData.city, formData.state, formData.postalCode, formData.country]);
+  }, [validateAddress]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

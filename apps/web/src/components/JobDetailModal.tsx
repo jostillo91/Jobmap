@@ -170,7 +170,7 @@ export default function JobDetailModal({ jobId, onClose }: JobDetailModalProps) 
                   Failed to Load Job Details
                 </h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                  We couldn't load the job details. The job may have been removed or there was a connection issue.
+                  We couldn&apos;t load the job details. The job may have been removed or there was a connection issue.
                 </p>
                 <button
                   onClick={() => window.location.reload()}
