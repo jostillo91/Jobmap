@@ -206,7 +206,7 @@ async function scrapeArizonaJobConnectionJobs(
   
   // Extract jobs from the page - look for actual job listing rows/items
   const jobs = await page.evaluate((max, base) => {
-    const results: Array<{title: string; company: string; location: string; url: string; description?: string; address?: string; postedDate?: string; salary?: string}> = [];
+    const results: Array<{title: string; company: string; location: string; url: string; description: string; address?: string; postedDate?: string; salary?: string}> = [];
     
     // Look for table rows that contain job links (most common pattern for job boards)
     const jobRows = Array.from(document.querySelectorAll("table tbody tr")).filter((tr: Element) => {
@@ -272,23 +272,23 @@ async function scrapeArizonaJobConnectionJobs(
         const salaryEl = document.querySelector(".salary, .pay, .compensation, [data-salary], [class*='salary']");
         
         return {
-          description: descriptionEl?.textContent?.trim() || "No description available",
+          description: descriptionEl?.textContent?.trim() || "",
           address: addressEl?.textContent?.trim() || undefined,
           postedDate: dateEl?.textContent?.trim() || undefined,
           salary: salaryEl?.textContent?.trim() || undefined,
         };
       });
       
-      jobs[i].description = details.description;
+      jobs[i].description = details.description || "";
       if (details.address && details.address.match(/\d/)) {
         jobs[i].address = details.address;
       }
-      jobs[i].postedDate = details.postedDate;
-      jobs[i].salary = details.salary;
+      jobs[i].postedDate = details.postedDate || undefined;
+      jobs[i].salary = details.salary || undefined;
       
     } catch (error) {
       console.warn(`   ⚠️  Failed to fetch details for job ${i + 1}:`, error);
-      jobs[i].description = "Description unavailable";
+      jobs[i].description = jobs[i].description || "";
     }
   }
   
