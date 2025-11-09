@@ -192,7 +192,7 @@ async function scrapeZipRecruiterJobs(
         const salaryEl = element.querySelector(".job_snippet, .salary, [data-testid='salary']");
         const linkEl = titleEl || element.querySelector("a");
 
-        if (titleEl && companyEl && locationEl) {
+        if (titleEl && companyEl && locationEl && linkEl) {
           const title = titleEl.textContent?.trim() || "";
           const company = companyEl.textContent?.trim() || "";
           const location = locationEl.textContent?.trim() || "";
