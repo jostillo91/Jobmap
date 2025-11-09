@@ -73,7 +73,7 @@ async function geocodeWithMapbox(address: GeocodeAddress): Promise<GeocodeResult
       const cityUrl = `${baseUrl}/${encodeURIComponent(cityQuery)}.json?access_token=${token}&limit=1&types=place`;
       const cityResponse = await fetch(cityUrl);
       if (cityResponse.ok) {
-        const cityData = await cityResponse.json();
+        const cityData = await cityResponse.json() as { features?: Array<{ center?: [number, number] }> };
         if (cityData.features?.[0]?.center) {
           const [cityLon, cityLat] = cityData.features[0].center;
           params.append("proximity", `${cityLon},${cityLat}`);
@@ -93,7 +93,7 @@ async function geocodeWithMapbox(address: GeocodeAddress): Promise<GeocodeResult
       throw new Error(`Mapbox API error: ${response.status} ${response.statusText}`);
     }
 
-    const data = await response.json();
+    const data = await response.json() as { features?: Array<{ center: [number, number] }> };
 
     if (!data.features || data.features.length === 0) {
       throw new Error("No results found for address");
@@ -191,7 +191,7 @@ export async function reverseGeocode(lat: number, lon: number, options?: {
       throw new Error(`Mapbox API error: ${response.status} ${response.statusText}`);
     }
 
-    const data = await response.json();
+    const data = await response.json() as { features?: Array<{ place_type?: string[]; context?: Array<{ id?: string; text?: string; short_code?: string }>; properties?: { address?: string; city?: string; state?: string; postcode?: string; country?: string } }> };
 
     if (!data.features || data.features.length === 0) {
       return null;

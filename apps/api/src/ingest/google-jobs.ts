@@ -223,18 +223,20 @@ async function scrapeGoogleJobs(
     }
     
     if (title && url && company !== "Unknown" && url.length > 10) {
-      jobs.push({ title, company, location, url, salary });
+      jobs.push({ title, company, location, url, salary, description: "" });
     }
   });
   
   console.log(`   📋 Found ${jobs.length} jobs from Google`);
   
-  // Extract descriptions from snippets if available
-  jobs.forEach((job, i) => {
-    const $jobEl = $("div[data-ved], div.g").eq(i);
-    const snippet = $jobEl.find("[class*='snippet'], [class*='description'], .s").text().trim();
-    job.description = snippet || "Job description available on original source";
-  });
+      // Extract descriptions from snippets if available
+      jobs.forEach((job, i) => {
+        const $jobEl = $("div[data-ved], div.g").eq(i);
+        const snippet = $jobEl.find("[class*='snippet'], [class*='description'], .s").text().trim();
+        if (job) {
+          job.description = snippet || "Job description available on original source";
+        }
+      });
   
   return jobs;
 }

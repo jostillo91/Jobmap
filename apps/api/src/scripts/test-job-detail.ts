@@ -22,7 +22,7 @@ async function testJobDetail() {
   console.log(`\nAPI Response status: ${response.status}`);
   
   if (response.ok) {
-    const data = await response.json();
+    const data = await response.json() as { title?: string; postedAt?: string; street?: string };
     console.log(`✅ API Response successful!`);
     console.log(`Job title: ${data.title}`);
     console.log(`PostedAt: ${data.postedAt}`);

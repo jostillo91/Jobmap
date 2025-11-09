@@ -206,17 +206,17 @@ async function scrapeArizonaJobConnectionJobs(
   
   // Extract jobs from the page - look for actual job listing rows/items
   const jobs = await page.evaluate((max, base) => {
-    const results: Array<{title: string; company: string; location: string; url: string}> = [];
+    const results: Array<{title: string; company: string; location: string; url: string; description?: string; address?: string; postedDate?: string; salary?: string}> = [];
     
     // Look for table rows that contain job links (most common pattern for job boards)
-    const jobRows = Array.from(document.querySelectorAll("table tbody tr")).filter(tr => {
+    const jobRows = Array.from(document.querySelectorAll("table tbody tr")).filter((tr: Element) => {
       const link = tr.querySelector("a[href*='/jobs/']");
       const title = tr.querySelector("h3, h4, .title, [class*='title'], a");
       return link && title && title.textContent && title.textContent.trim().length > 5;
     });
     
     // Also try div/li elements with job links
-    const jobCards = Array.from(document.querySelectorAll("div[class*='job'], li[class*='job'], article[class*='job']")).filter(el => {
+    const jobCards = Array.from(document.querySelectorAll("div[class*='job'], li[class*='job'], article[class*='job']")).filter((el: Element) => {
       const link = el.querySelector("a[href*='/jobs/']");
       return link && link.textContent && link.textContent.trim().length > 5;
     });
@@ -224,7 +224,7 @@ async function scrapeArizonaJobConnectionJobs(
     const allJobElements = [...jobRows, ...jobCards].slice(0, max);
     
     for (const el of allJobElements) {
-      const linkEl = el.querySelector("a[href*='/jobs/']") as HTMLLinkElement;
+      const linkEl = el.querySelector("a[href*='/jobs/']") as HTMLAnchorElement | null;
       if (!linkEl) continue;
       
       const title = linkEl.textContent?.trim() || "";
@@ -319,7 +319,7 @@ export async function ingestArizonaJobConnection(
   
   try {
     browser = await puppeteer.launch({
-      headless: "new",
+      headless: true,
       args: [
         "--no-sandbox",
         "--disable-setuid-sandbox",

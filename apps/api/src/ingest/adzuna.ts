@@ -243,7 +243,7 @@ async function fetchAdzunaJobs(keyword?: string, location = "Phoenix, AZ"): Prom
       throw new Error(`Adzuna API error: ${response.status} ${response.statusText} - ${errorText}`);
     }
 
-    const data: AdzunaResponse = await response.json();
+    const data = await response.json() as AdzunaResponse;
     return data.results || [];
   } catch (error) {
     console.error("Error fetching Adzuna jobs:", error);

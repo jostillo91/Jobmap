@@ -252,7 +252,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
                 results.ziprecruiter = await ingestZipRecruiter(searchLocation, keyword);
               }
             } catch (error) {
-              fastify.log.error(`Ingestion failed for ${source}:`, error);
+              fastify.log.error(`Ingestion failed for ${source}:`, error instanceof Error ? error : String(error));
               results[source] = { error: error instanceof Error ? error.message : "Unknown error" };
             }
           }

@@ -83,11 +83,11 @@ describe("Job Search - BBox Filtering", () => {
     );
 
     expect(result).toHaveLength(1);
-    expect(result[0].id).toBe("1");
-    expect(result[0].latitude).toBeGreaterThanOrEqual(phoenixBbox.minLat);
-    expect(result[0].latitude).toBeLessThanOrEqual(phoenixBbox.maxLat);
-    expect(result[0].longitude).toBeGreaterThanOrEqual(phoenixBbox.minLon);
-    expect(result[0].longitude).toBeLessThanOrEqual(phoenixBbox.maxLon);
+    expect((result as any[])[0].id).toBe("1");
+    expect((result as any[])[0].latitude).toBeGreaterThanOrEqual(phoenixBbox.minLat);
+    expect((result as any[])[0].latitude).toBeLessThanOrEqual(phoenixBbox.maxLat);
+    expect((result as any[])[0].longitude).toBeGreaterThanOrEqual(phoenixBbox.minLon);
+    expect((result as any[])[0].longitude).toBeLessThanOrEqual(phoenixBbox.maxLon);
   });
 
   it("should filter by keyword in bbox search", async () => {
@@ -137,7 +137,7 @@ describe("Job Search - BBox Filtering", () => {
     );
 
     expect(result).toHaveLength(1);
-    expect(result[0].title.toLowerCase()).toContain("software");
+    expect((result as any[])[0].title.toLowerCase()).toContain("software");
   });
 });
 

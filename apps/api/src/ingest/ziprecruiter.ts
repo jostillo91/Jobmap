@@ -325,7 +325,7 @@ export async function ingestZipRecruiter(
   try {
     // Launch browser with stealth settings
     browser = await puppeteer.launch({
-      headless: "new",
+      headless: true,
       args: [
         "--no-sandbox",
         "--disable-setuid-sandbox",

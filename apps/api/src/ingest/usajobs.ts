@@ -400,7 +400,7 @@ async function fetchUSAJobsJobs(keyword?: string, page = 1): Promise<{
 
   try {
     const response = await fetchWithRetry(url, headers);
-    const data: USAJobsResponse = await response.json();
+    const data = await response.json() as USAJobsResponse;
 
     const jobs = data.SearchResult?.SearchResultItems || [];
     const totalCount = data.SearchResult?.SearchResultCount || 0;
