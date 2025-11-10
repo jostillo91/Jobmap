@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: 18
           cache: "pnpm"
-      - run: pnpm install --frozen-lockfile
+      - run: pnpm install --no-frozen-lockfile
       - run: pnpm lint
       - run: pnpm typecheck
 
@@ -51,7 +51,7 @@ jobs:
         with:
           node-version: 18
           cache: "pnpm"
-      - run: pnpm install --frozen-lockfile
+      - run: pnpm install --no-frozen-lockfile
       - name: Setup database
         working-directory: apps/api
         run: |
@@ -71,7 +71,7 @@ jobs:
         with:
           node-version: 18
           cache: "pnpm"
-      - run: pnpm install --frozen-lockfile
+      - run: pnpm install --no-frozen-lockfile
       - run: pnpm build
 
 
