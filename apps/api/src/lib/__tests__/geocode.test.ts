@@ -69,7 +69,7 @@ describe("Geocoding", () => {
     expect(prisma.geocodeCache.upsert).toHaveBeenCalled();
 
     // Second call - cache hit, should not call API
-    // Reset fetch mock call count
+    // Reset fetch mock call count to verify it's not called
     (global.fetch as any).mockClear();
     (prisma.geocodeCache.findUnique as any).mockResolvedValueOnce({
       key: "123 main st, phoenix, az, 85001, us",
@@ -81,8 +81,8 @@ describe("Geocoding", () => {
 
     expect(result2.lat).toBe(33.4484);
     expect(result2.lon).toBe(-112.074);
-    // Fetch should not be called again (still 1 call total)
-    expect(global.fetch).toHaveBeenCalledTimes(1);
+    // Fetch should not be called again (cache hit means no API call)
+    expect(global.fetch).toHaveBeenCalledTimes(0);
   });
 
   it("should return null on geocoding failure (safe version)", async () => {
@@ -94,6 +94,14 @@ describe("Geocoding", () => {
     };
 
     (prisma.geocodeCache.findUnique as any).mockResolvedValueOnce(null);
+    // Mock proximity bias fetch (city lookup) - may fail or return empty
+    (global.fetch as any).mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        features: [],
+      }),
+    });
+    // Mock main geocode fetch - returns empty results
     (global.fetch as any).mockResolvedValueOnce({
       ok: true,
       json: async () => ({
