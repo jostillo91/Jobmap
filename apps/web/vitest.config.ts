@@ -1,4 +1,5 @@
-import { defineConfig, type PluginOption } from "vitest/config";
+import { defineConfig } from "vitest/config";
+import type { PluginOption } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 
