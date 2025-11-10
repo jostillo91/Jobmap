@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useEffect, useCallback, useRef } from "react";
+import { useMemo, useState, useEffect, useCallback, useRef, Suspense } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
@@ -51,7 +51,8 @@ function useDebounce<T>(value: T, delay: number): T {
   return debouncedValue;
 }
 
-export default function Home() {
+// Component that uses useSearchParams - must be wrapped in Suspense
+function HomeContent() {
   const { bounds, filters, selectedJobId, showSearchButton, setSelectedJobId, setShowSearchButton } =
     useMapStore();
   const [shouldSearch, setShouldSearch] = useState(true);
@@ -569,5 +570,23 @@ export default function Home() {
       {/* Keyboard Shortcuts Modal */}
       <KeyboardShortcutsModal isOpen={showShortcutsModal} onClose={() => setShowShortcutsModal(false)} />
     </div>
+  );
+}
+
+// Main component wrapped in Suspense for useSearchParams
+export default function Home() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mb-2" role="status" aria-label="Loading">
+            <span className="sr-only">Loading...</span>
+          </div>
+          <p className="text-sm text-gray-600 dark:text-gray-400">Loading...</p>
+        </div>
+      </div>
+    }>
+      <HomeContent />
+    </Suspense>
   );
 }

@@ -4,6 +4,12 @@ import "../styles/globals.css";
 import { Providers } from "./providers";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+};
+
 export const metadata: Metadata = {
   title: {
     default: "JobMap - Find Jobs Near You",
@@ -11,11 +17,6 @@ export const metadata: Metadata = {
   },
   description: "Discover job opportunities on an interactive map. Search for jobs by location, salary, and employment type.",
   metadataBase: process.env.NEXT_PUBLIC_SITE_URL ? new URL(process.env.NEXT_PUBLIC_SITE_URL) : undefined,
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 5,
-  },
   icons: {
     icon: "/favicon.ico",
     apple: "/apple-touch-icon.png",
