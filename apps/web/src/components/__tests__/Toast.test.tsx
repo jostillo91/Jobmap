@@ -49,11 +49,13 @@ describe("Toast", () => {
   it("closes toast after default duration", async () => {
     render(<ToastComponent toast={mockToast} onClose={mockOnClose} />);
 
+    // Advance timers to trigger the timeout
     vi.advanceTimersByTime(5000);
+    
+    // Run all pending timers to ensure setTimeout callbacks execute
+    await vi.runAllTimersAsync();
 
-    await waitFor(() => {
-      expect(mockOnClose).toHaveBeenCalledWith("test-toast-1");
-    });
+    expect(mockOnClose).toHaveBeenCalledWith("test-toast-1");
   });
 
   it("closes toast after custom duration", async () => {
@@ -64,11 +66,13 @@ describe("Toast", () => {
 
     render(<ToastComponent toast={customToast} onClose={mockOnClose} />);
 
+    // Advance timers to trigger the timeout
     vi.advanceTimersByTime(3000);
+    
+    // Run all pending timers to ensure setTimeout callbacks execute
+    await vi.runAllTimersAsync();
 
-    await waitFor(() => {
-      expect(mockOnClose).toHaveBeenCalledWith("test-toast-1");
-    });
+    expect(mockOnClose).toHaveBeenCalledWith("test-toast-1");
   });
 
   it("closes toast when close button is clicked", () => {
