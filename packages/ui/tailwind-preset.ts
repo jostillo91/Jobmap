@@ -1,6 +1,9 @@
 import type { Config } from "tailwindcss";
 
 const preset: Config = {
+  content: [
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
   theme: {
     extend: {
       colors: {
