@@ -141,6 +141,7 @@ const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
         }}
         aria-label={placeholder}
         aria-autocomplete="list"
+        role="combobox"
         aria-expanded={showSuggestions}
         aria-controls={showSuggestions ? "search-suggestions" : undefined}
         aria-activedescendant={selectedIndex >= 0 ? `suggestion-${selectedIndex}` : undefined}
