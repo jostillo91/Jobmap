@@ -14,6 +14,7 @@ interface MapProps {
 
 // Type for supercluster cluster/point feature
 interface ClusterFeature {
+  id?: number;
   type: "Feature";
   properties: {
     cluster: boolean;
